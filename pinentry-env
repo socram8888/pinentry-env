@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+# Abort on error
 set -euo pipefail
 
 # Initialize to an empty passphrase
@@ -8,12 +9,9 @@ passphrase=""
 echo "OK"
 while read cmd params; do
 	cmd=$(echo "$cmd" | tr 'A-Z' 'a-z')
-	if [ -z "$cmd" ]; then
-		continue;
-	fi
 
 	case "$cmd" in
-		\#*)
+		''|\#*)
 		;;
 
 		option)
