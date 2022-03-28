@@ -30,10 +30,10 @@ gpg --sign l33t-project.tar.gz
 
 ```bash
 export GPG_PASSPHRASE=CorrectHorseBatteryStaple
-rpm --add-sign l33t-project.rpm
+rpm --addsign l33t-project.rpm
 ```
 
 Acknowledgements
 ----------------
 
-Based on `fake-pinentry.sh` by Daniel Kahn Gillmor <dkg@fifthhorseman.net>.
+Based on `fake-pinentry.sh` by [Daniel Kahn Gillmor](https://github.com/dkg).
