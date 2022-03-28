@@ -1,0 +1,55 @@
+#!/bin/bash -e
+
+set -euo pipefail
+
+# Initialize to an empty passphrase
+passphrase=""
+
+echo "OK"
+while read cmd params; do
+	cmd=$(echo "$cmd" | tr 'A-Z' 'a-z')
+	if [ -z "$cmd" ]; then
+		continue;
+	fi
+
+	case "$cmd" in
+		\#*)
+		;;
+
+		option)
+			option=$(echo "${params%%=*}" | tr 'A-Z' 'a-z')
+			value="${params#*=}"
+
+			if [ "$option" == owner ]; then
+				# Convert into an array
+				ownerdata=($value)
+
+				# PID is on position 0
+				ownerpid="${ownerdata[0]}"
+
+				# Extract passphrase from environment
+				passphrase=$(tr '\0' '\n' </proc/${ownerpid}/environ | sed -nr 's/^GPG_PASSPHRASE=//p')
+			fi
+
+			echo "OK"
+		;;
+
+		getpin)
+			if [ -z "$passphrase" ]; then
+				echo "ERR 177 No passphrase set"
+			else
+				echo "D $passphrase"
+				echo "OK"
+			fi
+		;;
+
+		bye)
+			echo "OK"
+			exit 0
+		;;
+
+		*)
+			echo "OK"
+		;;
+	esac
+done
